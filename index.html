@@ -16,6 +16,12 @@
             align-items: center;
             min-height: 100vh;
         }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #000000;
+        }
+
         #todo-list {
             width: 100%;
             max-width: 600px;
@@ -24,9 +30,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
+
         h1 {
             text-align: left;
         }
+
         .task {
             display: flex;
             justify-content: space-between;
@@ -38,18 +46,22 @@
             background-color: #fff;
             transition: background-color 0.2s;
         }
+
         .task input[type="checkbox"] {
             margin-right: 10px;
         }
+
         .task:hover {
             background-color: #f7f7f7;
         }
+
         #task-input {
             width: 70%;
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         #add-button {
             background-color: #008080;
             color: #fff;
@@ -58,16 +70,20 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         #add-button:hover {
             background-color: #005555;
         }
+
         #tasks {
             margin-top: 20px;
         }
+
         #dark-mode-toggle {
             margin-top: 20px;
             text-align: center;
         }
+
         #dark-mode-button {
             background-color: #333;
             color: #fff;
@@ -76,69 +92,130 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         #dark-mode-button:hover {
             background-color: #000;
+        }
+
+        #download-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        #delete-all-button {
+            background-color: #FF0000;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #delete-all-button:hover {
+            background-color: #CC0000;
+        }
+
+        #download-txt-button {
+            background-color: #00b881;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #download-txt-button:hover {
+            background-color: #005555;
         }
     </style>
 </head>
 <body>
     <div id="todo-list">
-      <h1>📜 Minha Lista de Tarefas:</h1>
+        <h1>📜 Minha Lista de Tarefas:</h1>
         <input type="text" id="task-input" placeholder="Adicionar uma nova tarefa">
         <button id="add-button" onclick="addTask()">Adicionar</button>
         <div id="tasks">
             <!-- As tarefas serão exibidas aqui -->
+        <div>
+        <div id="download-buttons">
+            <button id="download-txt-button" onclick="downloadTxtFile()">💾 Baixar lista (TXT)</button>
+        </div>
+<br>
+<button id="delete-all-button" onclick="reloadPage()">🗑️ Limpar listas</button>
+
         </div>
         <div id="dark-mode-toggle">
-            <button id="dark-mode-button" onclick="toggleDarkMode()">Modo Escuro</button>
+            <button id="dark-mode-button" onclick="toggleDarkMode()">🔆 Modo escuro</button>
         </div>
     </div>
+</div>
+<script>
+function addTask() {
+    const taskInput = document.getElementById("task-input");
+    const taskText = taskInput.value.trim();
 
-    <script>
-        function addTask() {
-            const taskInput = document.getElementById("task-input");
-            const taskText = taskInput.value.trim();
+    if (taskText === "") {
+        alert("Por favor, insira uma tarefa.");
+        return;
+    }
 
-            if (taskText === "") {
-                alert("Por favor, insira uma tarefa.");
-                return;
-            }
+    const taskList = document.getElementById("tasks");
+    const taskItem = document.createElement("div");
+    taskItem.className = "task";
+    taskItem.innerHTML = `
+        <input type="checkbox" onchange="toggleTask(this)">
+        <span>${taskText}</span>
+        <button onclick="deleteTask(this)">Excluir</button>
+    `;
 
-            const taskList = document.getElementById("tasks");
-            const taskItem = document.createElement("div");
-            taskItem.className = "task";
-            taskItem.innerHTML = `
-                <input type="checkbox" onchange="toggleTask(this)">
-                <span>${taskText}</span>
-                <button onclick="deleteTask(this)">Excluir</button>
-            `;
+    taskList.appendChild(taskItem);
+    taskInput.value = "";
+}
 
-            taskList.appendChild(taskItem);
-            taskInput.value = "";
+function downloadTxtFile() {
+            const tasks = document.querySelectorAll(".task span");
+            const taskListText = Array.from(tasks).map(task => task.textContent).join('\n');
+            const blob = new Blob([taskListText], { type: "text/plain" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'lista_de_tarefas.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
+
+        const downloadTxtButton = document.getElementById("download-txt-button");
+        downloadTxtButton.addEventListener("click", downloadTxtFile);
 
         function toggleTask(checkbox) {
-            const taskText = checkbox.nextElementSibling;
-            taskText.style.textDecoration = checkbox.checked ? "line-through" : "none";
-        }
+    const taskText = checkbox.nextElementSibling;
+    taskText.style.textDecoration = checkbox.checked ? "line-through" : "none";
+}
 
-        function deleteTask(button) {
-            const taskItem = button.parentElement;
-            taskItem.remove();
-        }
+function deleteTask(button) {
+    const taskItem = button.parentElement;
+    taskItem.remove();
+}
 
-        function toggleDarkMode() {
-            const body = document.body;
-            const todoList = document.getElementById("todo-list");
+function clearCompletedTasks() {
+    const completedTasks = document.querySelectorAll(".task input[type='checkbox']:checked");
+    completedTasks.forEach(task => {
+        const taskItem = task.parentElement;
+        taskItem.remove();
+    });
+}
 
-            if (body.style.backgroundColor === "rgb(240, 240, 240)") {
-                body.style.backgroundColor = "#333";
-                todoList.style.backgroundColor = "#444";
-            } else {
-                body.style.backgroundColor = "#f0f0f0";
-                todoList.style.backgroundColor = "#fff";
-            }
-        }
+function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+}
+
+function reloadPage() {
+    window.location.reload();
+}
     </script>
 </body>
 </html>
