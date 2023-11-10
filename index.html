@@ -1,72 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Lista de Tarefas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/Luann8/To-Do-List-ou-Lista-de-Tarefas/main/1f4dc.ico" type="image/x-icon">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            background-image: url(https://i.pinimg.com/originals/68/2b/69/682b6982eea5bf25f3b212731b368407.jpg);
             color: #333;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s, color 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            transition: background-color 0.3s;
         }
 
         body.dark-mode {
+            background-image: url("C:/Users/luann/Downloads/682b6982eea5bf25f3b212731b368407.jpg"); /* Substitua com a URL da sua imagem de fundo escura */
             background-color: #333;
-            color: #000000;
+            color: #000;
         }
 
         #todo-list {
             width: 100%;
-            max-width: 600px;
+            max-width: 900px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s;
         }
 
         h1 {
-            text-align: left;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .task {
+        .add-task-section {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #ccc;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #fff;
-            transition: background-color 0.2s;
-        }
-
-        .task input[type="checkbox"] {
-            margin-right: 10px;
-        }
-
-        .task:hover {
-            background-color: #f7f7f7;
+            margin-bottom: 20px;
         }
 
         #task-input {
-            width: 70%;
-            padding: 5px;
+            flex: 1;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
+            margin-right: 10px;
         }
 
         #add-button {
             background-color: #008080;
             color: #fff;
             border: none;
-            padding: 5px 10px;
+            padding: 10px;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -75,105 +68,162 @@
             background-color: #005555;
         }
 
-        #tasks {
+        .filter-section, #download-buttons, #dark-mode-toggle {
             margin-top: 20px;
         }
 
-        #dark-mode-toggle {
-            margin-top: 20px;
-            text-align: center;
+        .filter-label {
+            font-weight: bold;
         }
 
-        #dark-mode-button {
-            background-color: #333;
+        .filter-options, #tasks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-button, .action-button {
+            flex: 1;
+            background-color: #555;
             color: #fff;
             border: none;
-            padding: 5px 10px;
+            padding: 10px;
             border-radius: 4px;
             cursor: pointer;
         }
 
-        #dark-mode-button:hover {
+        .filter-button.active {
             background-color: #000;
         }
 
-        #download-buttons {
+        .task {
+            flex: 1 0 100%;
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            align-items: center;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #fff;
+            transition: background-color 0.2s;
+            max-width: 829px;
+        }
+
+        .task input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .task.completed {
+            background-color: #f7f7f7;
+        }
+
+        .download-button {
+            flex-basis: 48%;
+        }
+
+        #delete-all-button:hover, #download-txt-button:hover, #dark-mode-button:hover {
+            background-color: #005555;
         }
 
         #delete-all-button {
             background-color: #FF0000;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
         }
 
-        #delete-all-button:hover {
-            background-color: #CC0000;
-        }
-
-        #download-txt-button {
-            background-color: #00b881;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #download-txt-button:hover {
-            background-color: #005555;
+        #dark-mode-button {
+            background-color: #333;
         }
     </style>
 </head>
 <body>
     <div id="todo-list">
-        <h1>📜 Minha Lista de Tarefas:</h1>
-        <input type="text" id="task-input" placeholder="Adicionar uma nova tarefa">
-        <button id="add-button" onclick="addTask()">Adicionar</button>
-        <div id="tasks">
-            <!-- As tarefas serão exibidas aqui -->
-        <div>
-        <div id="download-buttons">
-            <button id="download-txt-button" onclick="downloadTxtFile()">💾 Baixar lista (TXT)</button>
+        <h1>📜 My To-Do List:</h1>
+        <div class="add-task-section">
+            <input type="text" id="task-input" placeholder="Add a new task">
+            <button id="add-button" onclick="addTask()">Add</button>
         </div>
-<br>
-<button id="delete-all-button" onclick="reloadPage()">🗑️ Limpar listas</button>
+       
+        <hr>
 
+        <div class="filter-section">
+            <div class="filter-label">
+                <strong>Filter:</strong>
+            </div>
+            <div class="filter-options">
+                <button class="filter-button active" onclick="filterTasks('all')">All</button>
+                <button class="filter-button" onclick="filterTasks('personal')">Personal</button>
+                <button class="filter-button" onclick="filterTasks('work')">Work</button>
+                <button class="filter-button" onclick="filterTasks('study')">Study</button>
+            </div>
         </div>
-        <div id="dark-mode-toggle">
-            <button id="dark-mode-button" onclick="toggleDarkMode()">🔆 Modo escuro</button>
+
+        <hr>
+
+        <div id="tasks">
+            <!-- Tasks will be displayed here -->
+        </div>
+
+        <div id="download-buttons" class="filter-section">
+            <button class="action-button download-button" id="delete-all-button" onclick="clearCompletedTasks()">🗑️ Clear Completed</button>
+            <button class="action-button download-button" id="download-txt-button" onclick="downloadTxtFile()">💾 Download List (TXT)</button>
+        </div>
+
+        <hr>
+
+        <div id="dark-mode-toggle" class="filter-section">
+            <button class="action-button download-button" id="dark-mode-button" onclick="toggleDarkMode()">🔆 Dark Mode</button>
         </div>
     </div>
-</div>
-<script>
-function addTask() {
-    const taskInput = document.getElementById("task-input");
-    const taskText = taskInput.value.trim();
 
-    if (taskText === "") {
-        alert("Por favor, insira uma tarefa.");
-        return;
-    }
-
-    const taskList = document.getElementById("tasks");
-    const taskItem = document.createElement("div");
-    taskItem.className = "task";
-    taskItem.innerHTML = `
-        <input type="checkbox" onchange="toggleTask(this)">
-        <span>${taskText}</span>
-        <button onclick="deleteTask(this)">Excluir</button>
-    `;
-
-    taskList.appendChild(taskItem);
-    taskInput.value = "";
-}
-
-function downloadTxtFile() {
+    <script>
+        let currentFilter = 'all';
+    
+        function addTask() {
+            const taskInput = document.getElementById("task-input");
+            const taskText = taskInput.value.trim();
+    
+            if (taskText === "") {
+                alert("Please enter a task.");
+                return;
+            }
+    
+            const taskList = document.getElementById("tasks");
+            const taskItem = document.createElement("div");
+            taskItem.className = "task";
+            taskItem.dataset.category = currentFilter;
+            taskItem.innerHTML = `
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>${taskText}</span>
+                <button onclick="deleteTask(this)">Delete</button>
+            `;
+    
+            taskList.appendChild(taskItem);
+            taskInput.value = "";
+        }
+    
+        function toggleTask(checkbox) {
+            const taskText = checkbox.nextElementSibling;
+            taskText.style.textDecoration = checkbox.checked ? "line-through" : "none";
+            const taskItem = checkbox.parentElement;
+            taskItem.classList.toggle("completed");
+        }
+    
+        function deleteTask(button) {
+            const taskItem = button.parentElement;
+            taskItem.remove();
+        }
+    
+        function clearCompletedTasks() {
+            const completedTasks = document.querySelectorAll(".task.completed");
+            completedTasks.forEach(task => {
+                task.remove();
+            });
+    
+            // Reload the page
+            location.reload();
+        }
+    
+        function downloadTxtFile() {
             const tasks = document.querySelectorAll(".task span");
             const taskListText = Array.from(tasks).map(task => task.textContent).join('\n');
             const blob = new Blob([taskListText], { type: "text/plain" });
@@ -181,41 +231,43 @@ function downloadTxtFile() {
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = 'lista_de_tarefas.txt';
+            a.download = 'to-do-list.txt';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
         }
-
-        const downloadTxtButton = document.getElementById("download-txt-button");
-        downloadTxtButton.addEventListener("click", downloadTxtFile);
-
-        function toggleTask(checkbox) {
-    const taskText = checkbox.nextElementSibling;
-    taskText.style.textDecoration = checkbox.checked ? "line-through" : "none";
-}
-
-function deleteTask(button) {
-    const taskItem = button.parentElement;
-    taskItem.remove();
-}
-
-function clearCompletedTasks() {
-    const completedTasks = document.querySelectorAll(".task input[type='checkbox']:checked");
-    completedTasks.forEach(task => {
-        const taskItem = task.parentElement;
-        taskItem.remove();
-    });
-}
-
-function toggleDarkMode() {
-    const body = document.body;
-    body.classList.toggle('dark-mode');
-}
-
-function reloadPage() {
-    window.location.reload();
-}
+    
+        function filterTasks(category) {
+            currentFilter = category;
+            const tasks = document.querySelectorAll('.task');
+    
+            tasks.forEach(task => {
+                if (category === 'all' || task.dataset.category === category) {
+                    task.style.display = 'flex';
+                } else {
+                    task.style.display = 'none';
+                }
+            });
+    
+            updateFilterButtons(category);
+        }
+    
+        function updateFilterButtons(activeCategory) {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            filterButtons.forEach(button => {
+                if (button.textContent.toLowerCase() === activeCategory) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+    
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.getElementById('todo-list').classList.toggle('dark-mode');
+        }
     </script>
+    
 </body>
 </html>
